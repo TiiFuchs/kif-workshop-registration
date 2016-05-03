@@ -31,13 +31,13 @@ class RegistrationController extends Controller
         $name = $request->get("name");
         $workshops = $request->get("workshops");
 
+        $messages = [];
+
         // If no workshop was selected, return with info message
-        if (count($workshops)) {
+        if (count($workshops) == 0) {
             $messages[] = $this->generateMessage("Du hast keinen Workshop ausgewählt.", "info");
             return redirect("/")->with(compact("messages"))->withInput();
         }
-
-        $messages = [];
 
         foreach ($workshops as $workshop) {
             try {
