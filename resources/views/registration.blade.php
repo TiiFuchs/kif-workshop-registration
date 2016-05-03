@@ -6,7 +6,7 @@
         <p class="alert alert-{{$msg->type}}">{{ $msg->text }}</p>
     @endforeach
 
-    <form action="/register" method="post">
+    <form action="{{ url('/register') }}" method="post">
         {{ csrf_field() }}
         <div class="form-group">
             <label for="name">Name</label>

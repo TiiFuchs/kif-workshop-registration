@@ -13,3 +13,8 @@
 
 Route::get('/', "RegistrationController@index");
 Route::post("/register", "RegistrationController@register");
+
+Route::get('/list/{workshop}/{slots}', 'AdminController@show')->middleware("auth");
+
+
+Route::get('/login', 'AuthController@login');

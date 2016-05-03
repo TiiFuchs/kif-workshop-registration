@@ -31,5 +31,6 @@ class CreateRegistrationTable extends Migration
     public function down()
     {
         //
+        Schema::drop("registrations");
     }
 }
