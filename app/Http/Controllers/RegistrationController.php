@@ -17,20 +17,6 @@ use Illuminate\Http\Request;
 class RegistrationController extends Controller
 {
 
-    protected $workshopNames = [
-        "ebd" => "EBD Workshop",
-        "theater" => "Theatervorführung"
-    ];
-
-    private function getWorkshopName($workshopId)
-    {
-        if (array_key_exists($workshopId, $this->workshopNames)) {
-            return $this->workshopNames[$workshopId];
-        } else {
-            return $workshopId;
-        }
-    }
-
     function index(Request $request)
     {
         $messages = $request->session()->get("messages") ?: [];
@@ -62,8 +48,24 @@ class RegistrationController extends Controller
             }
         }
 
-        return redirect("/")->with(compact("messages"));
+        return redirect("/")->with(compact("messages"))->withInput();
 
+    }
+
+    /* Helper functions */
+
+    protected $workshopNames = [
+        "ebd" => "EBD Workshop",
+        "theater" => "Theatervorführung"
+    ];
+
+    private function getWorkshopName($workshopId)
+    {
+        if (array_key_exists($workshopId, $this->workshopNames)) {
+            return $this->workshopNames[$workshopId];
+        } else {
+            return $workshopId;
+        }
     }
 
     private function generateMessage($text, $type = "success")

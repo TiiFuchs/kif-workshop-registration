@@ -15,7 +15,12 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
 
-    function show(Request $request, $workshop = null, $slots = 30) {
+    function __construct() {
+
+        $this->authorize('generate-lists');
+    }
+
+    function listRegistrations(Request $request, $workshop = null, $slots = 30) {
 
         $mode = $request->get("mode") ?: "fcfs";
 
@@ -24,12 +29,12 @@ class AdminController extends Controller
         if ($mode == "fcfs") {
             $query = $query->orderBy('created_at', 'asc');
         } else if ($mode == "shuffle") {
-            $query = $query->orderByRaw("RANDOM()");
+            $query = $query->orderByRaw("RAND()");
         }
 
         $registrations = $query->take($slots)->get();
 
-        return view("show")->with(compact("registrations"));
+        return view("list")->with(compact("registrations", 'workshop', 'mode'));
 
     }
 

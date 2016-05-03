@@ -14,7 +14,13 @@
 Route::get('/', "RegistrationController@index");
 Route::post("/register", "RegistrationController@register");
 
-Route::get('/list/{workshop}/{slots}', 'AdminController@show')->middleware("auth");
+Route::auth();
 
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/admin', function() {
+        return view('home');
+    });
+    
+    Route::get('/list/{workshop}/{slots}', 'AdminController@listRegistrations');
+});
 
-Route::get('/login', 'AuthController@login');
