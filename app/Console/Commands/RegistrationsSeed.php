@@ -38,7 +38,7 @@ class RegistrationsSeed extends Command
     public function handle()
     {
         //
-        $num = $this->argument('num');
+        $num = (int) $this->argument('num');
         factory(\App\Registration::class, $num)->create();
         $this->info("$num registration entries created.");
     }

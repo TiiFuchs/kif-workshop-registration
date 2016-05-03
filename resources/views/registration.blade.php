@@ -3,7 +3,7 @@
 @section("content")
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-6 col-md-4">
 
             @foreach ($messages as $msg)
                 <p class="alert alert-{{$msg->type}}">{{ $msg->text }}</p>
