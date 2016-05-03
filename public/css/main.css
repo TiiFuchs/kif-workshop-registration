@@ -1,15 +1,11 @@
 .registration_num,
-.registration_num_heading {
-    padding: 0 5px 0;
-}
-
+.registration_num_heading,
 .registration_name,
-.registration_name_heading {
-    padding: 0 5px 0;
-}
-
-.registration_datetime,
-.registration_datetime_heading {
+.registration_name_heading,
+.registration_uni,
+.registration_uni_heading,
+.registration_email,
+.registration_email_heading {
     padding: 0 5px 0;
 }
 
@@ -20,4 +16,8 @@
 .registration_datetime {
     color: #737373;
     font-size: small;
+}
+
+.bccString {
+    color: #999;
 }

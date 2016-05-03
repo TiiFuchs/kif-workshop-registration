@@ -38,7 +38,15 @@ class AdminController extends Controller
 
         $registrations = $query->get();
 
-        return view("list")->with(compact("registrations", 'workshop', 'mode'));
+        $bccString = "";
+        foreach ($registrations as $registration) {
+            if ($registration->email) {
+                $bccString .= $registration->name . " <" . $registration->email . ">, ";
+            }
+        }
+        $bccString = substr($bccString, 0, -2);
+
+        return view("list")->with(compact("registrations", 'workshop', 'mode', 'bccString'));
 
     }
 
