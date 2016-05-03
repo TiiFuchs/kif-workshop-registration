@@ -22,7 +22,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(\App\Registration::class, function(Faker\Generator $faker) {
     return [
-        'name' => $faker->userName,
+        'name' => $faker->firstName,
         'workshop' => $faker->randomElement(['ebd', 'theater'])
     ];
 });
