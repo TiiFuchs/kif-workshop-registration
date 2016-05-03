@@ -12,7 +12,7 @@
 */
 
 Route::get('/', "RegistrationController@index");
-Route::post("/register", "RegistrationController@register");
+Route::post("/participate", "RegistrationController@participate");
 
 Route::auth();
 

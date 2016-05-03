@@ -25,7 +25,7 @@ class RegistrationController extends Controller
 
     }
 
-    function register(Request $request)
+    function participate(Request $request)
     {
 
         $name = $request->get("name");
