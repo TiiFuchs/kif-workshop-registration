@@ -10,6 +10,7 @@
 </head>
 <body>
 <div class="container-fluid">
+    <br>
     @yield("content")
 </div>
 </body>

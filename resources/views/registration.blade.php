@@ -12,9 +12,10 @@
             <form action="{{ url('/participate') }}" method="post">
                 {{ csrf_field() }}
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input class="form-control" type="text" name="name" id="name" placeholder="Name"
+                    <label for="name">Nickname</label>
+                    <input class="form-control" type="text" name="name" id="name" placeholder="Nickname"
                     value="{{ old('name') }}">
+                    <span class="help-block">Bitte gib deinen Nickname genauso wie auf deinem Namensschild an.</span>
                 </div>
                 <div class="checkbox">
                     <label>
