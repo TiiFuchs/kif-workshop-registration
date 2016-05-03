@@ -14,7 +14,8 @@
                 <div class="form-group">
                     <label for="name">Nickname</label>
                     <input class="form-control" type="text" name="name" id="name" placeholder="Nickname"
-                    value="{{ old('name') }}">
+                           value="{{ old('name') }}"
+                           autocomplete="off" autocorrect="off" autocapitalize="off">
                     <span class="help-block">Bitte gib deinen Nickname genauso wie auf deinem Namensschild an.</span>
                 </div>
                 <div class="checkbox">
