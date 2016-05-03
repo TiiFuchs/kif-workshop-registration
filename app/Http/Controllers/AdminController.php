@@ -20,7 +20,7 @@ class AdminController extends Controller
         $this->authorize('generate-lists');
     }
 
-    function listRegistrations(Request $request, $workshop = null, $slots = 30) {
+    function listRegistrations(Request $request, $workshop = null, $slots = '*') {
 
         $mode = $request->get("mode") ?: "fcfs";
 
@@ -32,7 +32,11 @@ class AdminController extends Controller
             $query = $query->orderByRaw("RAND()");
         }
 
-        $registrations = $query->take($slots)->get();
+        if ($slots !== '*') {
+            $query = $query->take($slots);
+        }
+
+        $registrations = $query->get();
 
         return view("list")->with(compact("registrations", 'workshop', 'mode'));
 
