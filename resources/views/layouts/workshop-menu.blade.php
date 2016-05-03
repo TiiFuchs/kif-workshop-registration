@@ -20,9 +20,9 @@
         </a>
 
         <ul class="dropdown-menu" role="menu">
-            <li><a href="{{ url('/list/theater/30?mode=fcfs') }}">First Come First
+            <li><a href="{{ url('/list/theater/21?mode=fcfs') }}">First Come First
                     Serve</a></li>
-            <li><a href="{{ url('/list/theater/30?mode=shuffle') }}">Shuffle</a>
+            <li><a href="{{ url('/list/theater/21?mode=shuffle') }}">Shuffle</a>
             </li>
         </ul>
     </li>
