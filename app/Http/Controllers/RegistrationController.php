@@ -10,24 +10,44 @@ namespace App\Http\Controllers;
 
 
 use App\Registration;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
 
 class RegistrationController extends Controller
 {
+
+    protected $activationTime = null;
+
+    function __construct() {
+        $timeString = env("KIF_ACCESS_FROM");
+        $this->activationTime = Carbon::createFromFormat("Y-m-d H:i:s", $timeString, "Europe/Berlin");
+    }
+
+    private function isRegistrationActive() {
+        return $this->activationTime->isPast();
+    }
 
     function index(Request $request)
     {
         $messages = $request->session()->get("messages") ?: [];
 
-        return view("registration")->with(compact("messages"));
+        $isActive = $this->isRegistrationActive();
+
+        if (!$isActive) {
+            $messages[] = $this->generateMessage("info:Du kannst dich erst ab dem ". $this->activationTime->formatLocalized("%d.%m um %H:%M Uhr") . " zu den Workshops anmelden.");
+        }
+
+        return view("registration")->with(compact("messages", "isActive"));
 
     }
 
     function participate(Request $request)
     {
+        // Check for time
+        if (!$this->isRegistrationActive()) {
+            return redirect("/")->withInput();
+        }
 
         $validator = \Validator::make($request->all(), [
             "name" => "required",
@@ -92,14 +112,18 @@ class RegistrationController extends Controller
         }
     }
 
+    private function generateMessage($message) {
+        $obj = new \stdClass();
+        $obj->class = strtok($message, ":");
+        $obj->text = strtok("");
+        return $obj;
+    }
+
     private function generateMessages($messages)
     {
         $messageArray = [];
         foreach ($messages as $message) {
-            $obj = new \stdClass();
-            $obj->class = strtok($message, ":");
-            $obj->text = strtok("");
-            $messageArray[] = $obj;
+            $messageArray[] = $this->generateMessage($message);
         }
 
         return $messageArray;
