@@ -31,6 +31,12 @@ class RegistrationController extends Controller
         $name = $request->get("name");
         $workshops = $request->get("workshops");
 
+        // If no workshop was selected, return with info message
+        if (count($workshops)) {
+            $messages[] = $this->generateMessage("Du hast keinen Workshop ausgewählt.", "info");
+            return redirect("/")->with(compact("messages"))->withInput();
+        }
+
         $messages = [];
 
         foreach ($workshops as $workshop) {
