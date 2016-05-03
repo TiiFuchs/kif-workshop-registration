@@ -35,7 +35,7 @@ class RegistrationController extends Controller
         $isActive = $this->isRegistrationActive();
 
         if (!$isActive) {
-            $messages[] = $this->generateMessage("info:Du kannst dich erst ab dem ". $this->activationTime->formatLocalized("%d.%m um %H:%M Uhr") . " zu den Workshops anmelden.");
+            $messages[] = $this->generateMessage("info:Du kannst dich erst ". $this->activationTime->formatLocalized("am %d.%m ab %H:%M Uhr") . " zu den Workshops anmelden.");
         }
 
         return view("registration")->with(compact("messages", "isActive"));
