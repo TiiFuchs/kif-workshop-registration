@@ -75,15 +75,14 @@ class RegistrationController extends Controller
 
         foreach ($workshops as $workshop) {
             try {
-                $num = -1;
-                \DB::transaction(function() use($name, $uni, $email, $workshop, &$num) {
-                    Registration::create(compact("name", "uni", "email", "workshop"));
-                    $num = Registration::whereWorkshop($workshop)->get()->count();
-                });
-                /*
                 $registration = Registration::create(compact("name", "uni", "email", "workshop"));
-                $num = Registration::whereWorkshop($workshop)->get()->count();
-                */
+                $allRegistrations = Registration::whereWorkshop($workshop)->orderBy('created_at', 'asc')->get()->toArray();
+                $num = 1;
+                for (; $num <= count($allRegistrations); $num++) {
+                    if ($allRegistrations[$num - 1]['id'] == $registration->id)
+                        break;
+                }
+
                 $seats = env("KIF_" . strtoupper($workshop) . "_SEATS");
 
                 $position_waitlist = $num - $seats;
