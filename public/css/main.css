@@ -21,3 +21,16 @@
 .bccString {
     color: #999;
 }
+
+
+@media print {
+    .bccHeading,
+    .bccString {
+        display: none;
+    }
+
+    .registration_email,
+    .registration_email_heading {
+        display: none;
+    }
+}

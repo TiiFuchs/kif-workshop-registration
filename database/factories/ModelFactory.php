@@ -24,7 +24,7 @@ $factory->define(\App\Registration::class, function(Faker\Generator $faker) {
     return [
         'name' => $faker->firstName,
         'uni' => $faker->city,
-        'email' => $faker->email,
+        'email' => $faker->optional(0.6, '')->email,
         'workshop' => $faker->randomElement(['ebd', 'theater'])
     ];
 });
