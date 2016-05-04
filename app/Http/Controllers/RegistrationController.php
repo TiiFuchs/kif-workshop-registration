@@ -75,17 +75,37 @@ class RegistrationController extends Controller
 
         foreach ($workshops as $workshop) {
             try {
-                Registration::create(compact("name", "uni", "email", "workshop"));
+                $num = -1;
+                \DB::transaction(function() use($name, $uni, $email, $workshop, &$num) {
+                    Registration::create(compact("name", "uni", "email", "workshop"));
+                    $num = Registration::whereWorkshop($workshop)->get()->count();
+                });
+                /*
+                $registration = Registration::create(compact("name", "uni", "email", "workshop"));
+                $num = Registration::whereWorkshop($workshop)->get()->count();
+                */
+                $seats = env("KIF_" . strtoupper($workshop) . "_SEATS");
 
-                $messages[] = "success:Du wurdest erfolgreich für '" . $this->getWorkshopName($workshop) . "' angemeldet.";
+                $position_waitlist = $num - $seats;
+
+                $mail_notice = !empty($email)
+                    ? "Du wirst per E-Mail benachrichtigt, wenn spontan ein Platz frei wird."
+                    : "";
+
+                $seat_message = $num <= $seats
+                    ? "Du hast einen garantierten Platz im Workshop. Wenn du aus irgendeinem Grund nicht kannst, melde dich bitte beim Orga vom Dienst in D120."
+                    : "Du stehst auf Platz $position_waitlist der Warteliste. $mail_notice";
+
+                $messages[] = "success:Du hast dich erfolgreich für '" . $this->getWorkshopName($workshop) . "' eingetragen.<br>
+                $seat_message";
             } catch (QueryException $e) {
 
                 if ($e->getCode() == 23000) { // Duplicate Entry
-                    $messages[] = "info:Du bist bereits für '" . $this->getWorkshopName($workshop) . "' angemeldet.";
+                    $messages[] = "info:Du bist bereits für '" . $this->getWorkshopName($workshop) . "' eingetragen.";
 
                 } else {
                     $messages[] = "danger:Bei der Anmeldung von '". $this->getWorkshopName($workshop) ."' ist ein Fehler aufgetreten. <br>
-                    <strong>Bitte kontaktiere einen Orga deines Vertrauens.</strong>";
+                    <strong>Bitte kontaktiere den Orga vom Dienst in D120.</strong>";
                 }
             }
         }

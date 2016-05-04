@@ -41,7 +41,8 @@
                            autocomplete="off" autocorrect="off" autocapitalize="off"
                            @if(!$isActive) disabled @endif
                            value="{{ old('email') }}">
-                    <span class="help-block">Wenn wir dich über spontane Änderungen benachrichtigen sollen, gib uns eine E-Mail Adresse.</span>
+                    <span class="help-block">Wenn wir dich über spontane Änderungen benachrichtigen sollen, gib uns eine E-Mail Adresse.
+                        Dies ist insbesondere dann nützlich, wenn du auf der Warteliste stehst und spontan ein Platz frei wird.</span>
                 </div>
                 <div class="checkbox">
                     <label>
