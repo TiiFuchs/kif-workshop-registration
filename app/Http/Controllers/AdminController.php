@@ -22,21 +22,18 @@ class AdminController extends Controller
 
     function listRegistrations(Request $request, $workshop = null, $slots = '*') {
 
-        $mode = $request->get("mode") ?: "fcfs";
+        $allRegistrations = Registration::whereWorkshop($workshop)->orderBy('created_at', 'asc')->get();
 
-        $query = Registration::whereWorkshop($workshop);
+        if ($slots != "*") {
+            // limit registrations and create waitinglist
+            $registrations = $allRegistrations->slice(0, $slots);
 
-        if ($mode == "fcfs") {
-            $query = $query->orderBy('created_at', 'asc');
-        } else if ($mode == "shuffle") {
-            $query = $query->orderByRaw("RAND()");
+            $waitinglist = $allRegistrations->slice($slots, $slots);
+        } else {
+            $registrations = $allRegistrations;
+
+            $waitinglist = [];
         }
-
-        if ($slots !== '*') {
-            $query = $query->take($slots);
-        }
-
-        $registrations = $query->get();
 
         $bccString = "";
         foreach ($registrations as $registration) {
@@ -46,7 +43,7 @@ class AdminController extends Controller
         }
         $bccString = substr($bccString, 0, -2);
 
-        return view("list")->with(compact("registrations", 'workshop', 'mode', 'bccString'));
+        return view("list")->with(compact("registrations", "waitinglist", 'workshop', 'bccString'));
 
     }
 
