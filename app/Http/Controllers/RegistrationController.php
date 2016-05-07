@@ -24,18 +24,24 @@ class RegistrationController extends Controller
         $this->activationTime = Carbon::createFromFormat("Y-m-d H:i:s", $timeString, "Europe/Berlin");
     }
 
-    private function isRegistrationActive() {
+    private function isRegistrationAllowed() {
         return $this->activationTime->isPast();
+    }
+
+    private function isRegistrationActive() {
+        return (bool) env("KIF_IS_ACTIVE", false);
     }
 
     function index(Request $request)
     {
         $messages = $request->session()->get("messages") ?: [];
 
-        $isActive = $this->isRegistrationActive();
+        $isActive = $this->isRegistrationActive() && $this->isRegistrationAllowed();
 
-        if (!$isActive) {
-            $messages[] = $this->generateMessage("info:Du kannst dich erst ". $this->activationTime->formatLocalized("am %d.%m ab %H:%M Uhr") . " zu den Workshops anmelden.");
+        if (!$this->isRegistrationActive()) {
+                $messages[] = $this->generateMessage("info:Zurzeit kannst du dich nicht für Workshops anmelden.");
+        } else if (!$this->isRegistrationAllowed()) {
+                $messages[] = $this->generateMessage("info:Du kannst dich erst ". $this->activationTime->formatLocalized("am %d.%m ab %H:%M Uhr") . " zu den Workshops anmelden.");
         }
 
         return view("registration")->with(compact("messages", "isActive"));
